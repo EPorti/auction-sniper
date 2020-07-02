@@ -1,0 +1,20 @@
+version: "3.8"
+services:
+  openfire-server:
+    container_name: openfire-server
+    image: openfire-server:${OPENFIRE_VERSION}
+    build:
+      context: openfire-server
+      args:
+        - OPENFIRE_VERSION=${OPENFIRE_VERSION}
+    ports:
+      - 5222:5222
+      - 9090:9090
+      - 9091:9091
+    networks:
+      - openfire_network
+
+networks:
+  openfire_network:
+    name: openfire_network
+    driver: bridge

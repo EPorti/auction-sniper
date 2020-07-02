@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jive>
+    <adminConsole>
+        <port>9090</port>
+        <securePort>9091</securePort>
+    </adminConsole>
+    <connectionProvider>
+        <className>org.jivesoftware.database.EmbeddedConnectionProvider</className>
+    </connectionProvider>
+    <autosetup>
+        <run>true</run>
+        <locale>en</locale>
+        <xmpp>
+            <auth>
+                <anonymous>true</anonymous>
+            </auth>
+            <domain>localhost</domain>
+            <fqdn>localhost</fqdn>
+        </xmpp>
+        <database>
+            <mode>embedded</mode>
+        </database>
+        <admin>
+            <email>admin@localhost</email>
+            <password>admin</password>
+        </admin>
+        <users>
+            <user1>
+                <username>sniper</username>
+                <password>sniper</password>
+                <name>Auction Sniper</name>
+                <email>sniper@localhost</email>
+                <roster>
+                    <item1>
+                        <jid>sniper@localhost</jid>
+                        <nickname>sniper</nickname>
+                    </item1>
+                </roster>
+            </user1>
+            <user2>
+                <username>auction-item-54321</username>
+                <password>auction</password>
+                <name>Item 54321</name>
+                <email>auction-item-54321@localhost</email>
+                <roster>
+                    <item1>
+                        <jid>auction-item-54321@localhost</jid>
+                        <nickname>auction-item-54321</nickname>
+                    </item1>
+                </roster>
+            </user2>
+            <user3>
+                <username>auction-item-65432</username>
+                <password>auction</password>
+                <name>Item 65432</name>
+                <email>auction-item-65432@localhost</email>
+                <roster>
+                    <item1>
+                        <jid>auction-item-65432@localhost</jid>
+                        <nickname>auction-item-65432</nickname>
+                    </item1>
+                </roster>
+            </user3>
+        </users>
+    </autosetup>
+</jive>

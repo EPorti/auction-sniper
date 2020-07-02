@@ -4,6 +4,7 @@ Auction Sniper
 **Auction Sniper** is an application that watches online auctions and automatically bids slightly higher whenever the price changes, until it reaches a stop-price or the auction closes.
 
 This is a worked example from [GOOS](http://www.growing-object-oriented-software.com/) book.
+Thanks [skinny85](https://github.com/skinny85/goos-book-code) for great step-by-step commit history.
 
 ## Domain
 
@@ -37,4 +38,23 @@ Auction sends _events_:
 ```
 SOLVersion: 1.1; Event: PRICE; CurrentPrice: 192; Increment: 7; Bidder: Someone else;
 SOLVersion: 1.1; Event: CLOSE;
+```
+
+## End-to-End Tests
+
+### Start/stop Openfire server
+
+```sh
+$ cd src/e2eTest/fixtures
+$ OPENFIRE_VERSION=4.6.0beta docker-compose up
+```
+
+```sh
+$ OPENFIRE_VERSION=4.6.0beta docker-compose down
+```
+
+### Run end-to-end tests
+
+```sh
+$ ./gradlew e2eTest
 ```
