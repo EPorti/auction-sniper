@@ -3,7 +3,7 @@ Auction Sniper
 
 **Auction Sniper** is an application that watches online auctions and automatically bids slightly higher whenever the price changes, until it reaches a stop-price or the auction closes.
 
-This is a worked example from [GOOS](http://www.growing-object-oriented-software.com/) book.
+This is a worked example from [GOOS](http://www.growing-object-oriented-software.com/) book.  
 Thanks [skinny85](https://github.com/skinny85/goos-book-code) for great step-by-step commit history.
 
 ## Domain
