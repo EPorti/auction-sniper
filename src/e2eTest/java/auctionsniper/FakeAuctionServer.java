@@ -15,16 +15,17 @@ import static org.junit.Assert.assertNotNull;
 /**
  * FakeAuctionServer is a substitute server that allows the test to check how the Auction Sniper
  * interacts with an auction using XMPP messages.
- *
+ * <p>
  * It has three responsibilities:
- *     1) connect to the XMPP broker and accept a request to join the chat from the Sniper;
- *     2) receive chat messages from the Sniper or fail if no message arrives within some timeout;
- *     3) allow the test to send messages back to the Sniper.
+ * 1) connect to the XMPP broker and accept a request to join the chat from the Sniper;
+ * 2) receive chat messages from the Sniper or fail if no message arrives within some timeout;
+ * 3) allow the test to send messages back to the Sniper.
  */
 public class FakeAuctionServer {
     public static final String ITEM_ID_AS_LOGIN = "auction-%s";
     public static final String AUCTION_RESOURCE = "Auction";
     public static final String XMPP_HOSTNAME = "localhost";
+
     private static final String AUCTION_PASSWORD = "auction";
 
     private final String itemId;

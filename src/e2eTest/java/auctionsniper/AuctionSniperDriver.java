@@ -10,7 +10,7 @@ import static org.hamcrest.Matchers.equalTo;
 
 /**
  * AuctionSniperDriver is an extension of a WindowLicker specialized for our tests.
- *
+ * <p>
  * It attempts to find a visible top-level window for the Auction Sniper within the given timeout.
  * It can also look for the relevant label in the user interface and confirms that it shows the given status.
  */

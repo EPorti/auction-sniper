@@ -9,20 +9,30 @@ import org.jivesoftware.smack.packet.Message;
 import javax.swing.*;
 
 public class Main {
-    private static final int ARG_HOSTNAME = 1;
-    private static final int ARG_USERNAME = 2;
-    private static final int ARG_PASSWORD = 3;
-    private static final int ARG_ITEM_ID = 4;
+    public static final String STATUS_JOINING = "Joining";
+    public static final String MAIN_WINDOW_NAME = "Auction Sniper Main";
 
     public static final String AUCTION_RESOURCE = "Auction";
     public static final String ITEM_ID_AS_LOGIN = "auction-%s";
     public static final String AUCTION_ID_FORMAT = ITEM_ID_AS_LOGIN + "@%s/" + AUCTION_RESOURCE;
 
-    public static final String STATUS_JOINING = "Joining";
-    public static final String STATUS_LOST = "Lost";
-    public static final String MAIN_WINDOW_NAME = "Auction Sniper Main";
+    private static final int ARG_HOSTNAME = 0;
+    private static final int ARG_USERNAME = 1;
+    private static final int ARG_PASSWORD = 2;
+    private static final int ARG_ITEM_ID = 3;
 
     private MainWindow ui;
+
+    /**
+     * If the chat is garbage-collected, the Smack runtime will hand the message to a new Chat which
+     * it will create for the purpose. In an interactive application, we would listen for and show
+     * these new chats, but our needs are different, so we add this quirk to stop it from happening.
+     * <p>
+     * This reference is made clumsy on purpose - to highlight in the code why we're doing it.
+     * We also know that we're likely to come up with a better solution in a while.
+     */
+    @SuppressWarnings("unused")
+    private Chat notToBeGCd;
 
     public Main() throws Exception {
         startUserInterface();
@@ -32,18 +42,21 @@ public class Main {
         SwingUtilities.invokeAndWait(() -> ui = new MainWindow());
     }
 
-    public static void main(String... args) throws Exception {
-        Main main = new Main();
+    private void joinAuction(XMPPConnection connection, String itemId) throws XMPPException {
+        final Chat chat = connection.getChatManager().createChat(
+                auctionId(itemId, connection),
+                // invokeLater avoids blocking the Smack library
+                (ch, message) -> SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_LOST)));
 
-        XMPPConnection connection = connectTo(args[ARG_HOSTNAME], args[ARG_USERNAME], args[ARG_PASSWORD]);
-        Chat chat = connection.getChatManager().createChat(auctionId(args[ARG_ITEM_ID], connection),
-                (ch, message) -> {
-                    // nothing yet
-                });
+        this.notToBeGCd = chat;
         chat.sendMessage(new Message());
     }
 
-    private static XMPPConnection connectTo(String hostname, String username, String password) throws XMPPException {
+    private static String auctionId(String itemId, XMPPConnection connection) {
+        return String.format(AUCTION_ID_FORMAT, itemId, connection.getServiceName());
+    }
+
+    private static XMPPConnection connection(String hostname, String username, String password) throws XMPPException {
         XMPPConnection connection = new XMPPConnection(hostname);
         connection.connect();
         connection.login(username, password, AUCTION_RESOURCE);
@@ -51,7 +64,11 @@ public class Main {
         return connection;
     }
 
-    private static String auctionId(String itemId, XMPPConnection connection) {
-        return String.format(AUCTION_ID_FORMAT, itemId, connection.getServiceName());
+    public static void main(String... args) throws Exception {
+        Main main = new Main();
+        main.joinAuction(
+                connection(args[ARG_HOSTNAME], args[ARG_USERNAME], args[ARG_PASSWORD]),
+                args[ARG_ITEM_ID]
+        );
     }
 }
