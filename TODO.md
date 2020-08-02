@@ -16,7 +16,6 @@ Sequence of features to build:
 
 ### Backlog
 
-- [ ] Single item - join, bid and lose  
 - [ ] Single item - join, bid and win  
 - [ ] Single item - show price details  
 - [ ] Multiple items  
@@ -25,7 +24,7 @@ Sequence of features to build:
 
 ### In Progress
 
-
+- [ ] Single item - join, bid and lose  
 
 ### Done
 
