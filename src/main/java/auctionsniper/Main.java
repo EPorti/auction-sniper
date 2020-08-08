@@ -90,4 +90,8 @@ public class Main implements AuctionEventListener {
         // invokeLater avoids blocking the Smack library
         SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_LOST));
     }
+
+    @Override
+    public void currentPrice(int price, int increment) {
+    }
 }

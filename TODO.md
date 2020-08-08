@@ -21,6 +21,8 @@ Sequence of features to build:
 - [ ] Multiple items  
 - [ ] Add new items through the GUI  
 - [ ] Stop bidding at stop price  
+- [ ] Translator - invalid message from Auction
+- [ ] Translator - incorrect message version
 
 ### In Progress
 
