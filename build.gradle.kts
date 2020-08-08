@@ -25,6 +25,8 @@ dependencies {
     implementation("org.igniterealtime.smack:smackx:3.1.0")
 
     testImplementation("junit:junit:4.13")
+    testImplementation("org.hamcrest:hamcrest-library:2.2")
+    testImplementation("org.jmock:jmock-junit4:2.12.0")
 
     e2eTestImplementation("junit:junit:4.13")
     e2eTestImplementation("org.hamcrest:hamcrest-library:2.2")
