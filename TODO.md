@@ -21,8 +21,9 @@ Sequence of features to build:
 - [ ] Multiple items  
 - [ ] Add new items through the GUI  
 - [ ] Stop bidding at stop price  
-- [ ] Translator - invalid message from Auction
-- [ ] Translator - incorrect message version
+- [ ] Translator - invalid message from Auction  
+- [ ] Translator - incorrect message version  
+- [ ] Auction - handle XMPPException on send  
 
 ### In Progress
 
