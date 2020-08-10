@@ -27,8 +27,9 @@ Sequence of features to build:
 
 ### In Progress
 
-- [ ] Single item - join, bid and lose  
+
 
 ### Done
 
 - [x] Single item - join, lose without bidding  
+- [x] Single item - join, bid and lose  
