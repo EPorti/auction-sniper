@@ -10,7 +10,11 @@ import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class Main implements SniperListener {
+/**
+ * Main has one job which is to create the various components
+ * and introduce them to each other.
+ */
+public class Main {
     public static final String STATUS_JOINING = "Joining";
     public static final String MAIN_WINDOW_NAME = "Auction Sniper Main";
 
@@ -60,7 +64,7 @@ public class Main implements SniperListener {
         this.notToBeGCd = chat;
 
         Auction auction = new XMPPAuction(chat);
-        chat.addMessageListener(new AuctionMessageTranslator(new AuctionSniper(auction, this)));
+        chat.addMessageListener(new AuctionMessageTranslator(new AuctionSniper(auction, new SniperStateDisplayer())));
         auction.join();
     }
 
@@ -84,15 +88,23 @@ public class Main implements SniperListener {
         );
     }
 
-    @Override
-    public void sniperLost() {
-        // invokeLater avoids blocking the Smack library
-        SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_LOST));
-    }
+    /**
+     * SniperStateDisplayer translates Sniper events into representation that Swing can display.
+     */
+    public class SniperStateDisplayer implements SniperListener {
+        @Override
+        public void sniperLost() {
+            showStatus(MainWindow.STATUS_LOST);
+        }
 
-    @Override
-    public void sniperBidding() {
-        SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_BIDDING));
-    }
+        @Override
+        public void sniperBidding() {
+            showStatus(MainWindow.STATUS_BIDDING);
+        }
 
+        private void showStatus(final String status) {
+            // invokeLater avoids blocking the Smack library
+            SwingUtilities.invokeLater(() -> ui.showStatus(status));
+        }
+    }
 }
