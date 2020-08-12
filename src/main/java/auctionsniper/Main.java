@@ -103,6 +103,10 @@ public class Main {
             showStatus(MainWindow.STATUS_BIDDING);
         }
 
+        @Override
+        public void sniperWinning() {
+        }
+
         private void showStatus(final String status) {
             // invokeLater avoids blocking the Smack library
             SwingUtilities.invokeLater(() -> ui.showStatus(status));

@@ -16,7 +16,14 @@ public class AuctionSniper implements AuctionEventListener {
 
     @Override
     public void currentPrice(int price, int increment, PriceSource priceSource) {
-        auction.bid(price + increment);
-        listener.sniperBidding();
+        switch (priceSource) {
+            case FromSniper:
+                listener.sniperWinning();
+                break;
+            case FromOtherBidder:
+                auction.bid(price + increment);
+                listener.sniperBidding();
+                break;
+        }
     }
 }
