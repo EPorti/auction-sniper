@@ -16,7 +16,6 @@ Sequence of features to build:
 
 ### Backlog
 
-- [ ] Single item - show price details  
 - [ ] Multiple items  
 - [ ] Add new items through the GUI  
 - [ ] Stop bidding at stop price  
@@ -26,7 +25,7 @@ Sequence of features to build:
 
 ### In Progress
 
-
+- [ ] Single item - show price details  
 
 ### Done
 
