@@ -13,9 +13,11 @@ public class AuctionSniperTest {
 
     private final SniperListener sniperListener = context.mock(SniperListener.class);
     private final Auction auction = context.mock(Auction.class);
-    private final AuctionSniper sniper = new AuctionSniper(auction, sniperListener);
+    private final AuctionSniper sniper = new AuctionSniper(auction, sniperListener, ITEM_ID);
     // for keeping track of the Sniper's current state
     private final States sniperState = context.states("sniper");
+
+    private static final String ITEM_ID = "item-id";
 
     @Test
     public void reportsLostWhenAuctionClosesImmediately() {
@@ -31,7 +33,7 @@ public class AuctionSniperTest {
         context.checking(new Expectations(){{
             ignoring(auction);
             // this is a supporting part of the test, not the part we really care about
-            allowing(sniperListener).sniperBidding();
+            allowing(sniperListener).sniperBidding(with(any(SniperState.class)));
                                     then(sniperState.is("bidding"));
             // the expectation that we want to assert:
             // if the Sniper isn't bidding when it makes this call, the test will fail
@@ -49,11 +51,12 @@ public class AuctionSniperTest {
     public void bidsHigherAndReportsBiddingWhenNewPricesArrives() {
         final int price = 1001;
         final int increment = 25;
+        final int bid = price + increment;
         context.checking(new Expectations(){{
             // bid should be sent exactly once
-            oneOf(auction).bid(price + increment);
+            oneOf(auction).bid(bid);
             // we don't actually care if listener is notified more than once
-            atLeast(1).of(sniperListener).sniperBidding();
+            atLeast(1).of(sniperListener).sniperBidding(new SniperState(ITEM_ID, price, bid));
         }});
 
         sniper.currentPrice(price, increment, PriceSource.FromOtherBidder);
