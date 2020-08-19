@@ -1,6 +1,7 @@
 package auctionsniper.ui;
 
 import auctionsniper.SniperSnapshot;
+import auctionsniper.SniperState;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
@@ -45,7 +46,7 @@ public class SnipersTableModelTest {
         }});
 
         // event that triggers the behavior we want to test
-        model.sniperStatusChanged(new SniperSnapshot("item id", 555, 666), MainWindow.STATUS_BIDDING);
+        model.sniperStatusChanged(new SniperSnapshot("item id", 555, 666, SniperState.BIDDING));
 
         // asserts that the table model returns the right values in the right columns
         assertColumnEquals(Column.ITEM_IDENTIFIER, "item id");

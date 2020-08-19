@@ -15,9 +15,6 @@ import java.awt.event.WindowEvent;
  * and introduce them to each other.
  */
 public class Main {
-    public static final String STATUS_JOINING = "Joining";
-    public static final String MAIN_WINDOW_NAME = "Auction Sniper Main";
-
     public static final String AUCTION_RESOURCE = "Auction";
     public static final String ITEM_ID_AS_LOGIN = "auction-%s";
     public static final String AUCTION_ID_FORMAT = ITEM_ID_AS_LOGIN + "@%s/" + AUCTION_RESOURCE;
@@ -99,8 +96,8 @@ public class Main {
         }
 
         @Override
-        public void sniperBidding(final SniperSnapshot state) {
-            SwingUtilities.invokeLater(() -> ui.sniperStatusChanged(state, MainWindow.STATUS_BIDDING));
+        public void sniperStateChanged(final SniperSnapshot state) {
+            SwingUtilities.invokeLater(() -> ui.sniperStatusChanged(state));
         }
 
         @Override

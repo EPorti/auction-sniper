@@ -1,11 +1,16 @@
 package auctionsniper;
 
 import auctionsniper.AuctionEventListener.PriceSource;
+import org.hamcrest.FeatureMatcher;
+import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.States;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Rule;
 import org.junit.Test;
+
+import static auctionsniper.SniperState.BIDDING;
+import static org.hamcrest.Matchers.equalTo;
 
 public class AuctionSniperTest {
     @Rule
@@ -33,7 +38,7 @@ public class AuctionSniperTest {
         context.checking(new Expectations(){{
             ignoring(auction);
             // this is a supporting part of the test, not the part we really care about
-            allowing(sniperListener).sniperBidding(with(any(SniperSnapshot.class)));
+            allowing(sniperListener).sniperStateChanged(with(aSniperThatIs(BIDDING)));
                                     then(sniperState.is("bidding"));
             // the expectation that we want to assert:
             // if the Sniper isn't bidding when it makes this call, the test will fail
@@ -56,7 +61,7 @@ public class AuctionSniperTest {
             // bid should be sent exactly once
             oneOf(auction).bid(bid);
             // we don't actually care if listener is notified more than once
-            atLeast(1).of(sniperListener).sniperBidding(new SniperSnapshot(ITEM_ID, price, bid));
+            atLeast(1).of(sniperListener).sniperStateChanged(new SniperSnapshot(ITEM_ID, price, bid, BIDDING));
         }});
 
         sniper.currentPrice(price, increment, PriceSource.FromOtherBidder);
@@ -83,5 +88,14 @@ public class AuctionSniperTest {
 
         sniper.currentPrice(123, 45, PriceSource.FromSniper);
         sniper.auctionClosed();
+    }
+
+    private Matcher<SniperSnapshot> aSniperThatIs(final SniperState state) {
+        return new FeatureMatcher<>(equalTo(state), "sniper that is ", "was") {
+            @Override
+            protected SniperState featureValueOf(SniperSnapshot actual) {
+                return actual.state;
+            }
+        };
     }
 }

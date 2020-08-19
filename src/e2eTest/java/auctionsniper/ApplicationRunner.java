@@ -3,7 +3,7 @@ package auctionsniper;
 import auctionsniper.ui.MainWindow;
 
 import static auctionsniper.FakeAuctionServer.XMPP_HOSTNAME;
-import static auctionsniper.Main.STATUS_JOINING;
+import static auctionsniper.ui.MainWindow.STATUS_JOINING;
 
 /**
  * ApplicationRunner wraps up all management and communicating
