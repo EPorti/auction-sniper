@@ -33,7 +33,7 @@ public class AuctionSniperTest {
         context.checking(new Expectations(){{
             ignoring(auction);
             // this is a supporting part of the test, not the part we really care about
-            allowing(sniperListener).sniperBidding(with(any(SniperState.class)));
+            allowing(sniperListener).sniperBidding(with(any(SniperSnapshot.class)));
                                     then(sniperState.is("bidding"));
             // the expectation that we want to assert:
             // if the Sniper isn't bidding when it makes this call, the test will fail
@@ -56,7 +56,7 @@ public class AuctionSniperTest {
             // bid should be sent exactly once
             oneOf(auction).bid(bid);
             // we don't actually care if listener is notified more than once
-            atLeast(1).of(sniperListener).sniperBidding(new SniperState(ITEM_ID, price, bid));
+            atLeast(1).of(sniperListener).sniperBidding(new SniperSnapshot(ITEM_ID, price, bid));
         }});
 
         sniper.currentPrice(price, increment, PriceSource.FromOtherBidder);

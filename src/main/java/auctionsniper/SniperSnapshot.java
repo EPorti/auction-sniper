@@ -14,12 +14,12 @@ import java.util.Objects;
  * eventually allow us to hide its fields behind a clean interface, satisfying the
  * "composite simpler than the sum of its parts" rule.
  */
-public class SniperState {
+public class SniperSnapshot {
     public final String itemId;
     public final int lastPrice;
     public final int lastBid;
 
-    public SniperState(String itemId, int lastPrice, int lastBid) {
+    public SniperSnapshot(String itemId, int lastPrice, int lastBid) {
         this.itemId = itemId;
         this.lastPrice = lastPrice;
         this.lastBid = lastBid;
@@ -29,7 +29,7 @@ public class SniperState {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SniperState that = (SniperState) o;
+        SniperSnapshot that = (SniperSnapshot) o;
         return lastPrice == that.lastPrice &&
                 lastBid == that.lastBid &&
                 Objects.equals(itemId, that.itemId);
