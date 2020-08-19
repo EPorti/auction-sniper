@@ -91,13 +91,8 @@ public class Main {
      */
     public class SniperStateDisplayer implements SniperListener {
         @Override
-        public void sniperStateChanged(final SniperSnapshot state) {
-            SwingUtilities.invokeLater(() -> ui.sniperStatusChanged(state));
-        }
-
-        private void showStatus(final String status) {
-            // invokeLater avoids blocking the Smack library
-            SwingUtilities.invokeLater(() -> ui.showStatus(status));
+        public void sniperStateChanged(final SniperSnapshot snapshot) {
+            SwingUtilities.invokeLater(() -> ui.sniperStatusChanged(snapshot));
         }
     }
 }
