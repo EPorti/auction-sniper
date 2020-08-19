@@ -9,8 +9,7 @@ import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static auctionsniper.SniperState.BIDDING;
-import static auctionsniper.SniperState.WINNING;
+import static auctionsniper.SniperState.*;
 import static org.hamcrest.Matchers.equalTo;
 
 public class AuctionSniperTest {
@@ -28,7 +27,7 @@ public class AuctionSniperTest {
     @Test
     public void reportsLostWhenAuctionClosesImmediately() {
         context.checking(new Expectations(){{
-            atLeast(1).of(sniperListener).sniperLost();
+            atLeast(1).of(sniperListener).sniperStateChanged(with(aSniperThatIs(LOST)));
         }});
 
         sniper.auctionClosed();
@@ -43,7 +42,7 @@ public class AuctionSniperTest {
                                     then(sniperState.is("bidding"));
             // the expectation that we want to assert:
             // if the Sniper isn't bidding when it makes this call, the test will fail
-            atLeast(1).of(sniperListener).sniperLost();
+            atLeast(1).of(sniperListener).sniperStateChanged(with(aSniperThatIs(LOST)));
                                     when(sniperState.is("bidding"));
         }});
 
@@ -90,7 +89,7 @@ public class AuctionSniperTest {
             ignoring(auction);
             allowing(sniperListener).sniperStateChanged(with(aSniperThatIs(WINNING)));
                                     then(sniperState.is("winning"));
-            atLeast(1).of(sniperListener).sniperWon();
+            atLeast(1).of(sniperListener).sniperStateChanged(with(aSniperThatIs(WON)));
                                     when(sniperState.is("winning"));
         }});
 

@@ -13,7 +13,5 @@ import java.util.EventListener;
  * peers are listening. Notifications decouple objects from each other.
  */
 public interface SniperListener extends EventListener {
-    void sniperLost();
     void sniperStateChanged(SniperSnapshot sniperSnapshot);
-    void sniperWon();
 }
