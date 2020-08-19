@@ -5,7 +5,6 @@ import auctionsniper.SniperSnapshot;
 import javax.swing.table.AbstractTableModel;
 
 import static auctionsniper.SniperState.BIDDING;
-import static auctionsniper.ui.MainWindow.STATUS_JOINING;
 
 /**
  * SnipersTableModel accepts updates from the Sniper and provides
@@ -13,13 +12,14 @@ import static auctionsniper.ui.MainWindow.STATUS_JOINING;
  */
 public class SnipersTableModel extends AbstractTableModel {
     private static String[] STATUS_TEXT = {
-            STATUS_JOINING,
-            MainWindow.STATUS_BIDDING
+            MainWindow.STATUS_JOINING,
+            MainWindow.STATUS_BIDDING,
+            MainWindow.STATUS_WINNING
     };
 
     private final static SniperSnapshot STARTING_UP = new SniperSnapshot("", 0, 0, BIDDING);
 
-    private String statusText = STATUS_JOINING;
+    private String statusText = MainWindow.STATUS_JOINING;
     private SniperSnapshot sniperSnapshot = STARTING_UP;
 
     @Override
