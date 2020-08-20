@@ -1,5 +1,6 @@
 package auctionsniper.ui;
 
+import auctionsniper.SniperListener;
 import auctionsniper.SniperSnapshot;
 import auctionsniper.SniperState;
 
@@ -9,7 +10,7 @@ import javax.swing.table.AbstractTableModel;
  * SnipersTableModel accepts updates from the Sniper and provides
  * a representation of those values to a JTable.
  */
-public class SnipersTableModel extends AbstractTableModel {
+public class SnipersTableModel extends AbstractTableModel implements SniperListener {
     private static final String[] STATUS_TEXT = {
             "Joining", "Bidding", "Winning", "Lost", "Won"
     };
@@ -32,7 +33,8 @@ public class SnipersTableModel extends AbstractTableModel {
         return Column.at(columnIndex).valueIn(sniperSnapshot);
     }
 
-    public void sniperStatusChanged(SniperSnapshot newSniperSnapshot) {
+    @Override
+    public void sniperStateChanged(SniperSnapshot newSniperSnapshot) {
         sniperSnapshot = newSniperSnapshot;
         fireTableRowsUpdated(0, 0);
     }

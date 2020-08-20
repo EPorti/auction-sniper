@@ -1,6 +1,7 @@
 package auctionsniper;
 
 import auctionsniper.ui.MainWindow;
+import auctionsniper.ui.SnipersTableModel;
 import auctionsniper.xmpp.XMPPAuction;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.XMPPConnection;
@@ -24,6 +25,7 @@ public class Main {
     private static final int ARG_PASSWORD = 2;
     private static final int ARG_ITEM_ID = 3;
 
+    private final SnipersTableModel snipers = new SnipersTableModel();
     private MainWindow ui;
 
     /**
@@ -42,7 +44,7 @@ public class Main {
     }
 
     private void startUserInterface() throws Exception {
-        SwingUtilities.invokeAndWait(() -> ui = new MainWindow());
+        SwingUtilities.invokeAndWait(() -> ui = new MainWindow(snipers));
     }
 
     private void disconnectWhenUICloses(final XMPPConnection connection) {
@@ -61,8 +63,10 @@ public class Main {
         this.notToBeGCd = chat;
 
         Auction auction = new XMPPAuction(chat);
-        chat.addMessageListener(new AuctionMessageTranslator(connection.getUser(),
-                new AuctionSniper(auction, new SniperStateDisplayer(), itemId)));
+        chat.addMessageListener(
+                new AuctionMessageTranslator(
+                        connection.getUser(),
+                        new AuctionSniper(auction, new SwingThreadSniperListener(snipers), itemId)));
         auction.join();
     }
 
@@ -87,12 +91,18 @@ public class Main {
     }
 
     /**
-     * SniperStateDisplayer translates Sniper events into representation that Swing can display.
+     * SwingThreadSniperListener pushes updates onto the Swing event thread.
      */
-    public class SniperStateDisplayer implements SniperListener {
+    public class SwingThreadSniperListener implements SniperListener {
+        private final SniperListener sniperListener;
+
+        public SwingThreadSniperListener(SniperListener sniperListener) {
+            this.sniperListener = sniperListener;
+        }
+
         @Override
         public void sniperStateChanged(final SniperSnapshot snapshot) {
-            SwingUtilities.invokeLater(() -> ui.sniperStatusChanged(snapshot));
+            SwingUtilities.invokeLater(() -> sniperListener.sniperStateChanged(snapshot));
         }
     }
 }
