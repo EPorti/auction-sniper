@@ -25,10 +25,11 @@ Sequence of features to build:
 
 ### In Progress
 
-- [ ] Single item - show price details  
+
 
 ### Done
 
 - [x] Single item - join, lose without bidding  
 - [x] Single item - join, bid and lose  
 - [x] Single item - join, bid and win  
+- [x] Single item - show price details  

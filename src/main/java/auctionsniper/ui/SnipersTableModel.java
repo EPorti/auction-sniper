@@ -14,7 +14,7 @@ public class SnipersTableModel extends AbstractTableModel implements SniperListe
     private static final String[] STATUS_TEXT = {
             "Joining", "Bidding", "Winning", "Lost", "Won"
     };
-    private final static SniperSnapshot STARTING_UP = new SniperSnapshot("", 0, 0, SniperState.BIDDING);
+    private final static SniperSnapshot STARTING_UP = new SniperSnapshot("", 0, 0, SniperState.JOINING);
 
     private SniperSnapshot sniperSnapshot = STARTING_UP;
 
@@ -26,6 +26,11 @@ public class SnipersTableModel extends AbstractTableModel implements SniperListe
     @Override
     public int getColumnCount() {
         return Column.values().length;
+    }
+
+    @Override
+    public String getColumnName(int column) {
+        return Column.at(column).name;
     }
 
     @Override

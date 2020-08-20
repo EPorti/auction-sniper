@@ -37,6 +37,13 @@ public class SnipersTableModelTest {
         // make sure we're rendering the right number of columns
         assertThat(model.getColumnCount(), equalTo(Column.values().length));
     }
+    
+    @Test
+    public void setsUpColumnHeadings() {
+        for (Column column : Column.values()) {
+            assertEquals(column.name, model.getColumnName(column.ordinal()));
+        }
+    }
 
     @Test
     public void setsSniperValuesInColumns() {
