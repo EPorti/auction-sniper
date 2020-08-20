@@ -1,5 +1,8 @@
 package auctionsniper;
 
+/**
+ * AuctionSniper contains our bidding policy.
+ */
 public class AuctionSniper implements AuctionEventListener {
     private final Auction auction;
     private final SniperListener listener;

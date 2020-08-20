@@ -7,8 +7,7 @@ import auctionsniper.SniperState;
 import javax.swing.table.AbstractTableModel;
 
 /**
- * SnipersTableModel accepts updates from the Sniper and provides
- * a representation of those values to a JTable.
+ * SniperTableModel represents the state of our bidding in the user interface.
  */
 public class SnipersTableModel extends AbstractTableModel implements SniperListener {
     private static final String[] STATUS_TEXT = {
