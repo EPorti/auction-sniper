@@ -24,7 +24,7 @@ Sequence of features to build:
 
 ### In Progress
 
-- [ ] Multiple items  
+
 
 ### Done
 
@@ -32,3 +32,4 @@ Sequence of features to build:
 - [x] Single item - join, bid and lose  
 - [x] Single item - join, bid and win  
 - [x] Single item - show price details  
+- [x] Multiple items  

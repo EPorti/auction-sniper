@@ -43,6 +43,17 @@ public class SniperSnapshot {
         return new SniperSnapshot(itemId, lastPrice, lastBid, state.whenAuctionClosed());
     }
 
+    /**
+     * SniperSnapshot decides itself whether it's referring to the same item,
+     * instead of having the table model extract and compare identifier.
+     * It's a clearer division of responsibilities, with the advantage that we can change
+     * its implementation without changing the table model.
+     * This avoids the "feature envy" code smell.
+     */
+    public boolean isForSameItemAs(SniperSnapshot snapshot) {
+        return itemId.equals(snapshot.itemId);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

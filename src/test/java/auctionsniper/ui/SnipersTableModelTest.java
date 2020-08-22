@@ -1,6 +1,8 @@
 package auctionsniper.ui;
 
 import auctionsniper.SniperSnapshot;
+import auctionsniper.SniperState;
+import auctionsniper.util.Defect;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
@@ -73,6 +75,42 @@ public class SnipersTableModelTest {
 
         assertEquals(1, model.getRowCount());
         assertRowMatchesSnapshot(0, joining);
+    }
+    
+    @Test
+    public void holdsSnipersInAdditionOrder() {
+        context.checking(new Expectations(){{
+            ignoring(listener);
+        }});
+
+        model.addSniper(SniperSnapshot.joining("item 0"));
+        model.addSniper(SniperSnapshot.joining("item 1"));
+
+        assertEquals("item 0", cellValue(0, Column.ITEM_IDENTIFIER));
+        assertEquals("item 1", cellValue(1, Column.ITEM_IDENTIFIER));
+    }
+
+    @Test
+    public void updatesCorrectRowForSniper() {
+        context.checking(new Expectations(){{
+            ignoring(listener);
+        }});
+
+        SniperSnapshot joining = SniperSnapshot.joining("item id");
+        SniperSnapshot anotherJoining = SniperSnapshot.joining("another item id");
+        SniperSnapshot bidding = anotherJoining.bidding(123, 45);
+
+        model.addSniper(joining);
+        model.addSniper(anotherJoining);
+
+        model.sniperStateChanged(bidding);
+
+        assertRowMatchesSnapshot(1, bidding);
+    }
+    
+    @Test(expected = Defect.class)
+    public void throwsDefectIfNoExistingSniperForAnUpdate() {
+        model.sniperStateChanged(new SniperSnapshot("item 1", 123, 234, SniperState.WINNING));
     }
 
     private Matcher<TableModelEvent> anInsertionAtRow(int row) {
