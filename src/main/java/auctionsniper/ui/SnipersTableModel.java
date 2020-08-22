@@ -5,6 +5,8 @@ import auctionsniper.SniperSnapshot;
 import auctionsniper.SniperState;
 
 import javax.swing.table.AbstractTableModel;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * SniperTableModel represents the state of our bidding in the user interface.
@@ -15,11 +17,11 @@ public class SnipersTableModel extends AbstractTableModel implements SniperListe
     };
     private final static SniperSnapshot STARTING_UP = new SniperSnapshot("", 0, 0, SniperState.JOINING);
 
-    private SniperSnapshot sniperSnapshot = STARTING_UP;
+    private List<SniperSnapshot> snapshots = new ArrayList<>();
 
     @Override
     public int getRowCount() {
-        return 1;
+        return snapshots.size();
     }
 
     @Override
@@ -34,13 +36,20 @@ public class SnipersTableModel extends AbstractTableModel implements SniperListe
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        return Column.at(columnIndex).valueIn(sniperSnapshot);
+        return Column.at(columnIndex).valueIn(snapshots.get(rowIndex));
     }
 
     @Override
     public void sniperStateChanged(SniperSnapshot newSniperSnapshot) {
-        sniperSnapshot = newSniperSnapshot;
+        snapshots.set(0, newSniperSnapshot);
         fireTableRowsUpdated(0, 0);
+    }
+
+    @Override
+    public void addSniper(SniperSnapshot snapshot) {
+        int row = snapshots.size();
+        snapshots.add(snapshot);
+        fireTableRowsInserted(row, row);
     }
 
     public static String textFor(SniperState state) {

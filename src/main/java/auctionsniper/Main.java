@@ -56,8 +56,8 @@ public class Main {
         });
     }
 
-    private void joinAuction(XMPPConnection connection, String itemId) {
-        disconnectWhenUICloses(connection);
+    private void joinAuction(XMPPConnection connection, String itemId) throws Exception {
+        safelyAddItemToModel(itemId);
 
         Chat chat = connection.getChatManager().createChat(auctionId(itemId, connection), null);
         notToBeGCd.add(chat);
@@ -68,6 +68,10 @@ public class Main {
                         connection.getUser(),
                         new AuctionSniper(auction, new SwingThreadSniperListener(snipers), itemId)));
         auction.join();
+    }
+
+    private void safelyAddItemToModel(String itemId) throws Exception {
+        SwingUtilities.invokeAndWait(() -> snipers.addSniper(SniperSnapshot.joining(itemId)));
     }
 
     private static String auctionId(String itemId, XMPPConnection connection) {
@@ -105,6 +109,11 @@ public class Main {
         @Override
         public void sniperStateChanged(final SniperSnapshot snapshot) {
             SwingUtilities.invokeLater(() -> sniperListener.sniperStateChanged(snapshot));
+        }
+
+        @Override
+        public void addSniper(SniperSnapshot snapshot) {
+            throw new UnsupportedOperationException();
         }
     }
 }
