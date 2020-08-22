@@ -16,7 +16,6 @@ Sequence of features to build:
 
 ### Backlog
 
-- [ ] Multiple items  
 - [ ] Add new items through the GUI  
 - [ ] Stop bidding at stop price  
 - [ ] Translator - invalid message from Auction  
@@ -25,7 +24,7 @@ Sequence of features to build:
 
 ### In Progress
 
-
+- [ ] Multiple items  
 
 ### Done
 
