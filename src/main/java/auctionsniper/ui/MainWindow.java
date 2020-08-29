@@ -1,6 +1,7 @@
 package auctionsniper.ui;
 
 import auctionsniper.UserRequestListener;
+import auctionsniper.util.Announcer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,6 +15,7 @@ public class MainWindow extends JFrame {
     private static final String SNIPERS_TABLE_NAME = "Snipers Table";
 
     private final SnipersTableModel snipers;
+    private final Announcer<UserRequestListener> userRequests = Announcer.to(UserRequestListener.class);
 
     public MainWindow(SnipersTableModel snipers) {
         super("Auction Sniper");
@@ -23,21 +25,6 @@ public class MainWindow extends JFrame {
         pack();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
-    }
-
-    private JPanel makeControls() {
-        JPanel controls = new JPanel(new FlowLayout());
-
-        final JTextField itemIdField = new JTextField();
-        itemIdField.setColumns(25);
-        itemIdField.setName(NEW_ITEM_ID_NAME);
-        controls.add(itemIdField);
-
-        final JButton joinAuctionButton = new JButton("Join Auction");
-        joinAuctionButton.setName(JOIN_BUTTON_NAME);
-        controls.add(joinAuctionButton);
-
-        return controls;
     }
 
     private void fillContentPane(JTable snipersTable, JPanel controls) {
@@ -53,6 +40,28 @@ public class MainWindow extends JFrame {
         return snipersTable;
     }
 
+    private JPanel makeControls() {
+        JPanel controls = new JPanel(new FlowLayout());
+
+        final JTextField itemIdField = new JTextField();
+        itemIdField.setColumns(25);
+        itemIdField.setName(NEW_ITEM_ID_NAME);
+        controls.add(itemIdField);
+
+        final JButton joinAuctionButton = new JButton("Join Auction");
+        joinAuctionButton.setName(JOIN_BUTTON_NAME);
+        // We are converting an ActionListener event, which is internal to the user interface framework,
+        // to a UserRequestListener event, which is about users interacting with an auction.
+        // These are two separate domains and MainWindow's job is to translate from one to the other.
+        // MainWindow is not concerned with how any implementation of UserRequestListener might work -
+        // that would be too much responsibility.
+        joinAuctionButton.addActionListener(e -> userRequests.announce().joinAuction(itemIdField.getText()));
+        controls.add(joinAuctionButton);
+
+        return controls;
+    }
+
     public void addUserRequestListener(UserRequestListener listener) {
+        userRequests.addListener(listener);
     }
 }

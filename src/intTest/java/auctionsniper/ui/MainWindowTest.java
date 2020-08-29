@@ -18,6 +18,7 @@ public class MainWindowTest {
         mainWindow.addUserRequestListener(itemId -> buttonProbe.setReceivedValue(itemId));
 
         driver.startBiddingFor("some item-id");
+        // driver's check() method repeatedly fires the given probe until it's satisfied or times out
         driver.check(buttonProbe);
     }
 }
