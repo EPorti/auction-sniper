@@ -2,9 +2,7 @@ package auctionsniper;
 
 import auctionsniper.ui.MainWindow;
 import auctionsniper.ui.SnipersTableModel;
-import auctionsniper.util.Announcer;
 import auctionsniper.xmpp.XMPPAuction;
-import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 
@@ -38,7 +36,7 @@ public class Main {
      * This reference is made clumsy on purpose - to highlight in the code why we're doing it.
      * We also know that we're likely to come up with a better solution in a while.
      */
-    private List<Chat> notToBeGCd = new ArrayList<>();
+    private List<Auction> notToBeGCd = new ArrayList<>();
 
     public Main() throws Exception {
         startUserInterface();
@@ -61,29 +59,18 @@ public class Main {
         ui.addUserRequestListener(itemId -> {
             snipers.addSniper(SniperSnapshot.joining(itemId));
 
-            Chat chat = connection.getChatManager()
-                    .createChat(auctionId(itemId, connection), null);
-
-            Announcer<AuctionEventListener> auctionEventListeners = Announcer.to(AuctionEventListener.class);
-            chat.addMessageListener(new AuctionMessageTranslator(
-                    connection.getUser(),
-                    auctionEventListeners.announce()));
-            notToBeGCd.add(chat);
-
-            Auction auction = new XMPPAuction(chat);
-            auctionEventListeners.addListener(
-                    new AuctionSniper(auction, new SwingThreadSniperListener(snipers), itemId));
+            Auction auction = new XMPPAuction(connection, itemId);
+            notToBeGCd.add(auction);
+            auction.addAuctionEventListener(
+                    new AuctionSniper(
+                            auction,
+                            new SwingThreadSniperListener(snipers),
+                            itemId
+                    )
+            );
 
             auction.join();
         });
-    }
-
-    private void safelyAddItemToModel(String itemId) throws Exception {
-        SwingUtilities.invokeAndWait(() -> snipers.addSniper(SniperSnapshot.joining(itemId)));
-    }
-
-    private static String auctionId(String itemId, XMPPConnection connection) {
-        return String.format(AUCTION_ID_FORMAT, itemId, connection.getServiceName());
     }
 
     private static XMPPConnection connection(String hostname, String username, String password) throws XMPPException {
