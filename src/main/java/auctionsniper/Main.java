@@ -83,9 +83,14 @@ public class Main {
 
     public static void main(String... args) throws Exception {
         Main main = new Main();
-        XMPPConnection connection = connection(args[ARG_HOSTNAME], args[ARG_USERNAME], args[ARG_PASSWORD]);
-        main.disconnectWhenUICloses(connection);
-        main.addRequestListenerFor(connection);
+
+        try {
+            XMPPConnection connection = connection(args[ARG_HOSTNAME], args[ARG_USERNAME], args[ARG_PASSWORD]);
+            main.disconnectWhenUICloses(connection);
+            main.addRequestListenerFor(connection);
+        } catch (ArrayIndexOutOfBoundsException e){
+            System.out.println("One or more arguments are missing!");
+        }
     }
 
     /**
